@@ -130,7 +130,98 @@
     </div>
 </section>
 
-{{-- ============================================================ Cards --}}
+{{-- ============================================================ 10-Page Overview --}}
+<section id="pages" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
+    <div class="text-center">
+        <p class="text-xs font-semibold uppercase tracking-widest text-emerald-600">Our Story in 10 Pages</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900">Explore DAP Trust</h2>
+        <p class="mt-3 mx-auto max-w-2xl text-sm text-slate-500">Every aspect of our trust — from governance to finances, from scholarships to community service — presented transparently.</p>
+    </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        {{-- Page 1: DAP Trust --}}
+        <a href="{{ route('admin.transparency.introduction') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">1</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">DAP Trust</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Introduction, mission, and governance overview of DAP Educational Trust.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 2: Endowment --}}
+        <a href="{{ route('admin.transparency.endowment') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">2</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Endowment</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Corpus investments across FDs, RDs and mutual funds for long-term growth.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 3: Scholarship --}}
+        <a href="{{ route('admin.transparency.donation-distribution') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">3</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Scholarship</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Donations distributed as scholarships and educational support to beneficiaries.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 4: Documents --}}
+        <a href="{{ route('admin.transparency.notice-board') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">4</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Documents</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Financial reports, audit reports, certificates and important notices.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 5: Financials --}}
+        <a href="{{ route('admin.transparency.financial-report') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">5</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Financials</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Complete income and expenditure report with live account balances.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 6: Operation Trend --}}
+        <a href="{{ route('admin.transparency.ops-trend') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">6</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Operation Trend</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Year-by-year trends in income, donations, expenses and investments since 2002.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 7: Trust Photos --}}
+        <a href="{{ route('admin.transparency.introduction') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">7</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Trust Photos</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Visual documentation of trust activities, events and community work.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 8: Commendation --}}
+        <a href="{{ route('admin.transparency.certificates') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">8</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Commendation</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Government certificates, commendations and recognition received by the trust.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 9: OPS Sangam Particulars --}}
+        <a href="{{ route('admin.transparency.ops') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">9</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">OPS Sangam</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Donations to OPS Saiva Peravai and its centres across regions.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+
+        {{-- Page 10: Miscellaneous --}}
+        <a href="{{ route('admin.transparency.bank-particulars') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">10</div>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">Miscellaneous</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Bank particulars, IT returns, resolutions and other administrative details.</p>
+            <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
+        </a>
+    </div>
+</section>
+
+{{-- ============================================================ Highlights --}}
 <section id="notice-board" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
     <div class="grid gap-6 md:grid-cols-3">
         {{-- Endowment --}}
