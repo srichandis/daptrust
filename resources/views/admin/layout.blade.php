@@ -45,6 +45,7 @@
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3.5h14a1.5 1.5 0 011.5 1.5V19a1.5 1.5 0 01-1.5 1.5H5A1.5 1.5 0 013.5 19V5A1.5 1.5 0 015 3.5zm2.5 6h9m-9 4h6m-6 4h9"/></svg>
                 Reports
             </a>
+
         </nav>
 
         {{-- Transparency portal --}}

@@ -38,6 +38,8 @@ Route::prefix('admin')->group(function () {
             'parameters' => ['accounts' => 'account'],
         ])->except('show');
 
+
+
         Route::controller(TransparencyController::class)->prefix('transparency')->name('admin.transparency.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('introduction', 'introduction')->name('introduction');
