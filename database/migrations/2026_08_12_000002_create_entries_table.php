@@ -38,6 +38,7 @@ return new class extends Migration
                 'it_paid',
                 'bank_balance',
                 'data_correction',
+                'donation_to_ops',
             ]);
 
             $table->date('entry_date');

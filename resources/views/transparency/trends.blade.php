@@ -12,7 +12,7 @@
 
     <div class="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <h2 class="text-lg font-semibold text-slate-900">Year-by-Year (FY02 — FY26)</h2>
+            <h2 class="text-lg font-semibold text-slate-900">Year-by-Year ({{ $series[0]['fy'] }} — {{ end($series)['fy'] }})</h2>
             <span class="text-xs font-medium text-emerald-600">● Live update</span>
         </div>
         @include('transparency.partials.trend-chart')

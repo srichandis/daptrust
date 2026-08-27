@@ -123,7 +123,7 @@
             @endif
 
             <div class="absolute -right-10 top-8 hidden rounded-xl border border-white/10 bg-white/95 px-3.5 py-2.5 text-slate-800 shadow-xl backdrop-blur sm:block">
-                <p class="text-[10px] font-semibold uppercase tracking-wider text-emerald-600">FY 2025-26</p>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-emerald-600">{{ $fyDisplay }}</p>
                 <p class="text-sm font-bold">Financial Overview</p>
             </div>
         </div>
@@ -183,7 +183,7 @@
         <a href="{{ route('admin.transparency.ops-trend') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b2447] text-white text-sm font-bold transition group-hover:bg-emerald-600">6</div>
             <h3 class="mt-4 text-base font-semibold text-slate-900">Operation Trend</h3>
-            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Year-by-year trends in income, donations, expenses and investments since 2002.</p>
+            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">Year-by-year trends in income, donations, expenses and investments since FY{{ $firstFyYear }}.</p>
             <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">View <span aria-hidden="true">→</span></span>
         </a>
 

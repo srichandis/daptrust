@@ -8,26 +8,26 @@
     {{-- Summary cards --}}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-slate-500">Total Balance</p>
-            <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ number_format($totalBalance, 2) }}</p>
-            <p class="mt-1 text-xs text-slate-400">Across all accounts</p>
+            <p class="text-sm font-medium text-slate-500">INCOME</p>
+            <p class="mt-1 text-2xl font-bold text-emerald-600">₹{{ indian_number_format($incomeTotal, 2) }}</p>
+            <p class="mt-1 text-xs text-slate-400">Donations + Interest + IT Return</p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-slate-500">Total Income</p>
-            <p class="mt-1 text-2xl font-bold text-emerald-600">₹{{ number_format($incomeTotal, 2) }}</p>
-            <p class="mt-1 text-xs text-slate-400">All income-type entries</p>
+            <p class="text-sm font-medium text-slate-500">EXPENSE</p>
+            <p class="mt-1 text-2xl font-bold text-red-600">₹{{ indian_number_format($expenseTotal, 2) }}</p>
+            <p class="mt-1 text-xs text-slate-400">Donations given + Charges</p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-slate-500">Total Expenses</p>
-            <p class="mt-1 text-2xl font-bold text-red-600">₹{{ number_format($expenseTotal, 2) }}</p>
-            <p class="mt-1 text-xs text-slate-400">All expense-type entries</p>
-        </div>
-        <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-slate-500">Net Position</p>
-            <p class="mt-1 text-2xl font-bold {{ ($incomeTotal - $expenseTotal) >= 0 ? 'text-slate-900' : 'text-red-600' }}">
-                ₹{{ number_format($incomeTotal - $expenseTotal, 2) }}
+            <p class="text-sm font-medium text-slate-500">SAVINGS</p>
+            <p class="mt-1 text-2xl font-bold {{ $savings >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
+                ₹{{ indian_number_format($savings, 2) }}
             </p>
-            <p class="mt-1 text-xs text-slate-400">Income − expenses</p>
+            <p class="mt-1 text-xs text-slate-400">Income − Expenses</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">EXP + SAV</p>
+            <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ indian_number_format($incomeTotal, 2) }}</p>
+            <p class="mt-1 text-xs text-slate-400">Should equal INCOME</p>
         </div>
     </div>
 
@@ -58,12 +58,20 @@
                         </div>
                     </div>
                     <p class="font-semibold {{ $account->balance() < 0 ? 'text-red-600' : 'text-slate-900' }}">
-                        ₹{{ number_format($account->balance(), 2) }}
+                        ₹{{ indian_number_format($account->balance(), 2) }}
                     </p>
                 </div>
             @empty
                 <p class="px-5 py-6 text-sm text-slate-500">No accounts yet.</p>
             @endforelse
+            @if ($accounts->isNotEmpty())
+                <div class="flex items-center justify-between border-t-2 border-indigo-200 bg-indigo-50 px-5 py-3.5">
+                    <p class="font-semibold text-indigo-700">BANK BALANCE</p>
+                    <p class="text-lg font-bold text-indigo-700">
+                        ₹{{ indian_number_format($totalBalance, 2) }}
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -78,7 +86,7 @@
                     @php $total = $incomeByType[$type] ?? 0; @endphp
                     <div class="flex items-center justify-between px-5 py-3 text-sm">
                         <span class="text-slate-600">{{ \App\Models\Entry::labelFor($type) }}</span>
-                        <span class="font-semibold text-emerald-600">₹{{ number_format($total, 2) }}</span>
+                        <span class="font-semibold text-emerald-600">₹{{ indian_number_format($total, 2) }}</span>
                     </div>
                 @endforeach
             </div>
@@ -94,9 +102,54 @@
                     @php $total = $expenseByType[$type] ?? 0; @endphp
                     <div class="flex items-center justify-between px-5 py-3 text-sm">
                         <span class="text-slate-600">{{ \App\Models\Entry::labelFor($type) }}</span>
-                        <span class="font-semibold text-red-600">₹{{ number_format($total, 2) }}</span>
+                        <span class="font-semibold text-red-600">₹{{ indian_number_format($total, 2) }}</span>
                     </div>
                 @endforeach
+            </div>
+        </div>
+    </div>
+
+    {{-- Trust Summary --}}
+    <div class="mt-6 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-5 py-4">
+            <h2 class="text-lg font-semibold text-slate-900">Trust Summary</h2>
+            <p class="mt-1 text-xs text-slate-500">All-time totals across all accounts and financial years</p>
+        </div>
+        <div class="divide-y divide-slate-100">
+            @foreach ($trustSummary as $label => $value)
+                @php
+                    $isIncome = in_array($label, ['Donor / Receipts', 'Bank Interest', 'FD/RD/MF Interest', 'IT Return']);
+                    $isExpense = in_array($label, ['Donation (Disbursements)', 'Bank Charges', 'Professional Charges']);
+                    $isNeutral = $label === 'FD + MF + RD (Investments)';
+                @endphp
+                <div class="flex items-center justify-between px-5 py-3 text-sm">
+                    <span class="text-slate-600">{{ $label }}</span>
+                    <span class="font-semibold
+                        {{ $isIncome ? 'text-emerald-600' : ($isExpense ? 'text-red-600' : 'text-slate-700') }}">
+                        ₹{{ indian_number_format($value, 2) }}
+                    </span>
+                </div>
+            @endforeach
+            {{-- Donation to OPS (separate category) --}}
+            <div class="flex items-center justify-between px-5 py-3 text-sm">
+                <span class="text-slate-600">Donation to OPS</span>
+                <span class="font-semibold text-red-600">₹{{ indian_number_format($opsDonationTotal, 2) }}</span>
+            </div>
+            @php
+                $netIncome = ($trustSummary['Donor / Receipts'] ?? 0)
+                    + ($trustSummary['Bank Interest'] ?? 0)
+                    + ($trustSummary['FD/RD/MF Interest'] ?? 0)
+                    + ($trustSummary['IT Return'] ?? 0);
+                $netExpense = ($trustSummary['Donation (Disbursements)'] ?? 0)
+                    + ($trustSummary['Bank Charges'] ?? 0)
+                    + ($trustSummary['Professional Charges'] ?? 0);
+                $net = $netIncome - $netExpense;
+            @endphp
+            <div class="flex items-center justify-between px-5 py-3.5 text-sm font-semibold">
+                <span class="text-slate-800">Net Income − Expenses</span>
+                <span class="{{ $net >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
+                    ₹{{ indian_number_format($net, 2) }}
+                </span>
             </div>
         </div>
     </div>
@@ -134,7 +187,7 @@
                             </td>
                             <td class="max-w-xs truncate px-5 py-3 text-slate-500">{{ $entry->particulars ?: $entry->donor_name ?: '—' }}</td>
                             <td class="px-5 py-3 text-right font-semibold {{ $entry->is_income ? 'text-emerald-600' : ($entry->is_expense ? 'text-red-600' : 'text-slate-700') }}">
-                                ₹{{ number_format($entry->amount, 2) }}
+                                ₹{{ indian_number_format($entry->amount, 2) }}
                             </td>
                         </tr>
                     @empty

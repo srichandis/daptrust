@@ -27,6 +27,17 @@ class LandingController extends Controller
 
         $latestEntry = $latestEntries->first();
 
+        // Dynamic FY range from data
+        $fyNums = Entry::query()->select('financial_year')->distinct()->pluck('financial_year')
+            ->filter()
+            ->map(fn ($fy) => (int) substr((string) $fy, 2))
+            ->sort()->values();
+        $latestFy = Entry::max('financial_year') ?? 'FY' . date('y');
+        $firstFyYear = $fyNums->isNotEmpty() ? 2000 + $fyNums->first() : 2002;
+        $fyLabel = str_replace('FY', '', $latestFy);
+        $fyYearStart = (int) $fyLabel;
+        $fyDisplay = "FY " . (2000 + $fyYearStart) . '-' . str_pad((string) (($fyYearStart + 1) % 100), 2, '0', STR_PAD_LEFT);
+
         $money = fn (float $value): string => static::money($value);
 
         return view('welcome', compact(
@@ -38,6 +49,8 @@ class LandingController extends Controller
             'latestEntries',
             'latestEntry',
             'money',
+            'firstFyYear',
+            'fyDisplay',
         ));
     }
 
@@ -46,17 +59,6 @@ class LandingController extends Controller
      */
     public static function money(float $value): string
     {
-        $sign = $value < 0 ? '−' : '';
-        $abs = abs($value);
-
-        if ($abs >= 10000000) {
-            return $sign.'₹'.number_format($abs / 10000000, 2).' Cr';
-        }
-
-        if ($abs >= 100000) {
-            return $sign.'₹'.number_format($abs / 100000, 2).' L';
-        }
-
-        return $sign.'₹'.number_format($abs, 2);
+        return indian_money($value);
     }
 }

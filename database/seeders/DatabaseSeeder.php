@@ -19,46 +19,37 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Account::create([
-            'name' => 'Bank Account 1 (RD)',
-            'type' => 'bank',
-            'bank_name' => '',
-            'branch' => '',
-            'account_number' => '',
-            'ifsc' => '',
-            'investment_type' => 'rd',
-            'opening_balance' => 0,
-            'is_active' => true,
-        ]);
-
-        Account::create([
-            'name' => 'Bank Account 2 (RD)',
-            'type' => 'bank',
-            'bank_name' => '',
-            'branch' => '',
-            'account_number' => '',
-            'ifsc' => '',
-            'investment_type' => 'rd',
-            'opening_balance' => 0,
-            'is_active' => true,
-        ]);
-
-        Account::create([
-            'name' => 'Bank Account 3 (MF)',
-            'type' => 'bank',
-            'bank_name' => '',
-            'branch' => '',
-            'account_number' => '',
-            'ifsc' => '',
-            'investment_type' => 'mf',
-            'opening_balance' => 0,
-            'is_active' => true,
-        ]);
-
-        Account::create([
             'name' => 'Cash Account',
             'type' => 'cash',
             'investment_type' => 'none',
-            'opening_balance' => 0,
+            'opening_balance' => 31200.00,
+            'is_active' => true,
+        ]);
+
+        Account::create([
+            'name' => 'Andhra Bank',
+            'type' => 'bank',
+            'bank_name' => 'Andhra Bank',
+            'investment_type' => 'none',
+            'opening_balance' => 2788170.00,
+            'is_active' => true,
+        ]);
+
+        Account::create([
+            'name' => 'State Bank of India',
+            'type' => 'bank',
+            'bank_name' => 'SBI',
+            'investment_type' => 'none',
+            'opening_balance' => 699901.00,
+            'is_active' => true,
+        ]);
+
+        Account::create([
+            'name' => 'HDFC Bank',
+            'type' => 'bank',
+            'bank_name' => 'HDFC',
+            'investment_type' => 'none',
+            'opening_balance' => 0.00,
             'is_active' => true,
         ]);
     }

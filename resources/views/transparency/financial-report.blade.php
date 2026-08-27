@@ -6,10 +6,10 @@
 
 @section('content')
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        @include('transparency.partials.stat-card', ['label' => 'Total Balance', 'value' => $money($totalBalance), 'hint' => 'Across all accounts'])
-        @include('transparency.partials.stat-card', ['label' => 'Total Income', 'value' => $money($incomeTotal), 'hint' => 'All income-type entries', 'color' => 'text-emerald-600'])
-        @include('transparency.partials.stat-card', ['label' => 'Total Expenses', 'value' => $money($expenseTotal), 'hint' => 'All expense-type entries', 'color' => 'text-red-600'])
-        @include('transparency.partials.stat-card', ['label' => 'Net Position', 'value' => $money($incomeTotal - $expenseTotal), 'hint' => 'Income − expenses', 'color' => ($incomeTotal - $expenseTotal) >= 0 ? 'text-slate-900' : 'text-red-600'])
+        @include('transparency.partials.stat-card', ['label' => 'INCOME', 'value' => $money($incomeTotal), 'hint' => 'Donations + Interest + IT Return', 'color' => 'text-emerald-600'])
+        @include('transparency.partials.stat-card', ['label' => 'EXPENSE', 'value' => $money($expenseTotal), 'hint' => 'Donations given + Charges', 'color' => 'text-red-600'])
+        @include('transparency.partials.stat-card', ['label' => 'SAVINGS', 'value' => $money($savings), 'hint' => 'Income − Expenses', 'color' => $savings >= 0 ? 'text-emerald-600' : 'text-red-600'])
+        @include('transparency.partials.stat-card', ['label' => 'EXP + SAV', 'value' => $money($incomeTotal), 'hint' => 'Should equal INCOME', 'color' => 'text-slate-900'])
     </div>
 
     <div class="mt-6 grid gap-6 lg:grid-cols-2">

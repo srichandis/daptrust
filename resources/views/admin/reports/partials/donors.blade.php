@@ -25,7 +25,7 @@
                     <td class="max-w-[10rem] py-2 pr-4 text-slate-500">{{ $entry->donor_address ?: '—' }}</td>
                     <td class="py-2 pr-4">{{ $entry->nature_of_donation ?: '—' }}</td>
                     <td class="py-2 pr-4">{{ $entry->mode_of_receipt ?: '—' }}</td>
-                    <td class="whitespace-nowrap py-2 pr-4 text-right font-medium text-emerald-600">₹{{ number_format($entry->amount, 2) }}</td>
+                    <td class="whitespace-nowrap py-2 pr-4 text-right font-medium text-emerald-600">₹{{ indian_number_format($entry->amount, 2) }}</td>
                     <td class="py-2 pr-4">{{ $entry->section_code ?: '—' }}</td>
                     <td class="py-2 pr-4">{{ $entry->donor_pan ?: '—' }}</td>
                     <td class="max-w-[10rem] py-2 pr-4 text-slate-500">{{ $entry->donor_bank_details ?: '—' }}</td>
@@ -36,7 +36,7 @@
             <tfoot>
             <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
                 <td class="py-2 pr-4" colspan="5">Total receipts ({{ $donors->count() }})</td>
-                <td class="py-2 pr-4 text-right">₹{{ number_format($donors->sum('amount'), 2) }}</td>
+                <td class="py-2 pr-4 text-right">₹{{ indian_number_format($donors->sum('amount'), 2) }}</td>
                 <td colspan="4"></td>
             </tr>
             </tfoot>

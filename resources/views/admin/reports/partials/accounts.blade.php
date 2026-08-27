@@ -13,7 +13,7 @@
                 <div class="flex justify-between"><dt>IFSC</dt><dd>{{ $account->ifsc ?: '—' }}</dd></div>
                 <div class="flex justify-between"><dt>Entries</dt><dd>{{ $account->entries_count }}</dd></div>
                 <div class="flex justify-between border-t border-slate-100 pt-2 font-semibold text-slate-900">
-                    <dt>Balance</dt><dd>₹{{ number_format($item['balance'], 2) }}</dd>
+                    <dt>Balance</dt><dd>₹{{ indian_number_format($item['balance'], 2) }}</dd>
                 </div>
             </dl>
         </div>

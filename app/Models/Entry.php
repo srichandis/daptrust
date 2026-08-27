@@ -28,6 +28,7 @@ class Entry extends Model
     public const TYPE_IT_PAID = 'it_paid';
     public const TYPE_BANK_BALANCE = 'bank_balance';
     public const TYPE_DATA_CORRECTION = 'data_correction';
+    public const TYPE_DONATION_TO_OPS = 'donation_to_ops';
 
     /**
      * Display labels for every entry type (ordered as the trust defined them).
@@ -54,6 +55,7 @@ class Entry extends Model
         self::TYPE_IT_PAID => 'IT Paid',
         self::TYPE_BANK_BALANCE => 'Bank Balance',
         self::TYPE_DATA_CORRECTION => 'Data Correction',
+        self::TYPE_DONATION_TO_OPS => 'Donation to OPS',
     ];
 
     /** Groups shown in the sidebar, form, and filters. */
@@ -88,6 +90,9 @@ class Entry extends Model
         ],
         'Utilities' => [
             self::TYPE_DATA_CORRECTION,
+        ],
+        'Donation to OPS' => [
+            self::TYPE_DONATION_TO_OPS,
         ],
     ];
 
@@ -141,6 +146,7 @@ class Entry extends Model
         self::TYPE_FD_INVESTMENT,
         self::TYPE_RD_INVESTMENT,
         self::TYPE_MF_INVESTMENT,
+        self::TYPE_DONATION_TO_OPS,
     ];
 
     /** Types that require an account (income/expense ledger). */

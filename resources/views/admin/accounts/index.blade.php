@@ -23,6 +23,7 @@
                     <th class="px-5 py-3 font-semibold">Bank / Details</th>
                     <th class="px-5 py-3 font-semibold">Investments</th>
                     <th class="px-5 py-3 text-right font-semibold">Opening Balance</th>
+                    <th class="px-5 py-3 text-right font-semibold">Balance</th>
                     <th class="px-5 py-3 text-right font-semibold">Entries</th>
                     <th class="px-5 py-3 text-center font-semibold">Status</th>
                     <th class="px-5 py-3 text-right font-semibold">Actions</th>
@@ -57,7 +58,8 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-5 py-3.5 text-right text-slate-700">₹{{ number_format($account->opening_balance, 2) }}</td>
+                        <td class="px-5 py-3.5 text-right text-slate-700">₹{{ indian_number_format($account->opening_balance, 2) }}</td>
+                        <td class="px-5 py-3.5 text-right font-semibold {{ $account->balance() < 0 ? 'text-red-600' : 'text-slate-900' }}">₹{{ indian_number_format($account->balance(), 2) }}</td>
                         <td class="px-5 py-3.5 text-right text-slate-500">{{ $account->entries_count }}</td>
                         <td class="px-5 py-3.5 text-center">
                             <span class="rounded-full px-2.5 py-0.5 text-xs font-medium {{ $account->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500' }}">
@@ -76,7 +78,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="8" class="px-5 py-8 text-center text-slate-500">No accounts yet.</td></tr>
+                    <tr><td colspan="9" class="px-5 py-8 text-center text-slate-500">No accounts yet.</td></tr>
                 @endforelse
             </tbody>
         </table>

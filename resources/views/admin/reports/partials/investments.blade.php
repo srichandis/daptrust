@@ -1,17 +1,22 @@
-<div class="grid gap-4 md:grid-cols-3">
+<div class="grid gap-4 md:grid-cols-4">
     <div class="rounded-xl border border-slate-200 p-4">
         <p class="text-xs uppercase tracking-wide text-slate-500">Total {{ $investmentType }} invested</p>
-        <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ number_format($investmentTotal, 2) }}</p>
+        <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ indian_number_format($investmentTotal, 2) }}</p>
         <p class="text-xs text-slate-400">{{ $investments->count() }} deposit{{ $investments->count() === 1 ? '' : 's' }}</p>
     </div>
     <div class="rounded-xl border border-slate-200 p-4">
         <p class="text-xs uppercase tracking-wide text-slate-500">Total matured</p>
-        <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ number_format($maturityTotal, 2) }}</p>
+        <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ indian_number_format($maturityTotal, 2) }}</p>
         <p class="text-xs text-slate-400">{{ $maturities->count() }} maturity event{{ $maturities->count() === 1 ? '' : 's' }}</p>
     </div>
     <div class="rounded-xl border border-slate-200 p-4">
+        <p class="text-xs uppercase tracking-wide text-slate-500">Available {{ $investmentType }}</p>
+        <p class="mt-1 text-2xl font-bold {{ $availableAmount >= 0 ? 'text-emerald-600' : 'text-red-600' }}">₹{{ indian_number_format($availableAmount, 2) }}</p>
+        <p class="text-xs text-slate-400">Invested − matured</p>
+    </div>
+    <div class="rounded-xl border border-slate-200 p-4">
         <p class="text-xs uppercase tracking-wide text-slate-500">Interest earned</p>
-        <p class="mt-1 text-2xl font-bold text-emerald-600">₹{{ number_format($interestTotal, 2) }}</p>
+        <p class="mt-1 text-2xl font-bold text-emerald-600">₹{{ indian_number_format($interestTotal, 2) }}</p>
         <p class="text-xs text-slate-400">Periodic + at maturity</p>
     </div>
 </div>
@@ -35,7 +40,7 @@
                 <tr class="border-t border-slate-100">
                     <td class="py-2 pr-4">{{ $entry->account?->name ?: '—' }}</td>
                     <td class="whitespace-nowrap py-2 pr-4">{{ $entry->entry_date?->format('d-m-Y') }}</td>
-                    <td class="py-2 pr-4 text-right font-medium">₹{{ number_format($entry->amount, 2) }}</td>
+                    <td class="py-2 pr-4 text-right font-medium">₹{{ indian_number_format($entry->amount, 2) }}</td>
                     <td class="py-2 pr-4 text-slate-400">—</td>
                     <td class="py-2 pr-4 text-slate-400">—</td>
                     <td class="py-2 text-slate-400">—</td>
@@ -66,8 +71,8 @@
                 <tr class="border-t border-slate-100">
                     <td class="whitespace-nowrap py-2 pr-4">{{ $entry->entry_date?->format('d-m-Y') }}</td>
                     <td class="py-2 pr-4">{{ $entry->account?->name ?: '—' }}</td>
-                    <td class="py-2 pr-4 text-right">₹{{ number_format($entry->amount, 2) }}</td>
-                    <td class="py-2 pr-4 text-right text-emerald-600">₹{{ number_format($entry->interest_amount ?? 0, 2) }}</td>
+                    <td class="py-2 pr-4 text-right">₹{{ indian_number_format($entry->amount, 2) }}</td>
+                    <td class="py-2 pr-4 text-right text-emerald-600">₹{{ indian_number_format($entry->interest_amount ?? 0, 2) }}</td>
                     <td class="py-2">{{ $entry->particulars ?: '—' }}</td>
                 </tr>
             @empty

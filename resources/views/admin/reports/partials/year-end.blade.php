@@ -20,7 +20,7 @@
                     <td class="py-2 pr-4">{{ $entry->label }}</td>
                     <td class="py-2 pr-4">{{ $entry->account?->name ?: '—' }}</td>
                     <td class="whitespace-nowrap py-2 pr-4 text-right font-medium {{ $entry->is_income ? 'text-emerald-600' : 'text-rose-600' }}">
-                        ₹{{ number_format($entry->amount, 2) }}
+                        ₹{{ indian_number_format($entry->amount, 2) }}
                     </td>
                     <td class="py-2">{{ $entry->notes ?: '—' }}</td>
                 </tr>

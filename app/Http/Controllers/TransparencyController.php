@@ -39,9 +39,9 @@ class TransparencyController extends Controller
             ['bank-particulars', 'DAP Trust Bank Particulars'],
         ],
         'OPS Donations' => [
-            ['income-trend', 'DAP Trust Income Trend from 2002'],
-            ['donation-expense-trend', 'DAP Trust Donation Expense Trend from 2002'],
-            ['investment-trend', 'DAP Trust Total Investment MF + FD + RD Trend from 2002'],
+            ['income-trend', 'DAP Trust Income Trend'],
+            ['donation-expense-trend', 'DAP Trust Donation Expense Trend'],
+            ['investment-trend', 'DAP Trust Total Investment MF + FD + RD Trend'],
             ['it-return-trend', 'DAP Trust IT Return Trend'],
             ['ops-trend', 'DAP Trust OPS Donation Trend'],
         ],
@@ -71,7 +71,24 @@ class TransparencyController extends Controller
         $accounts = Account::orderBy('type')->orderBy('name')->get();
         $totalBalance = collect($accounts)->sum(fn (Account $a) => $a->balance());
 
-        [$incomeTotal, $expenseTotal] = $this->totals();
+        // Dashboard-style totals (specific subset of entry types)
+        $incomeTypes = [
+            Entry::TYPE_DONATION_INCOME,
+            Entry::TYPE_BANK_INTEREST,
+            Entry::TYPE_FD_INTEREST,
+            Entry::TYPE_RD_INTEREST,
+            Entry::TYPE_MF_INTEREST,
+            Entry::TYPE_IT_RETURN,
+        ];
+        $expenseTypes = [
+            Entry::TYPE_DONATION_EXPENSE,
+            Entry::TYPE_BANK_CHARGES,
+            Entry::TYPE_PROFESSIONAL_CHARGES,
+            Entry::TYPE_STATIONARY_CHARGES,
+        ];
+        $incomeTotal = Entry::whereIn('entry_type', $incomeTypes)->sum('amount');
+        $expenseTotal = Entry::whereIn('entry_type', $expenseTypes)->sum('amount');
+        $savings = $incomeTotal - $expenseTotal;
 
         $incomeByType = $this->byType(Entry::INCOME_TYPES);
         $expenseByType = $this->byType(Entry::EXPENSE_TYPES);
@@ -86,7 +103,7 @@ class TransparencyController extends Controller
         $donationIncome = $this->donationIncome();
 
         return $this->render('transparency.financial-report', compact(
-            'totalBalance', 'incomeTotal', 'expenseTotal', 'incomeByType', 'expenseByType',
+            'totalBalance', 'incomeTotal', 'expenseTotal', 'savings', 'incomeByType', 'expenseByType',
             'latestEntries', 'donationIncome',
         ));
     }
@@ -265,7 +282,7 @@ class TransparencyController extends Controller
     public function incomeTrend(): View
     {
         return $this->trend(
-            'Income Trend from 2002',
+            'Income Trend',
             'Annual income received by the trust, financial year by financial year.',
             Entry::whereIn('entry_type', Entry::INCOME_TYPES)
         );
@@ -274,7 +291,7 @@ class TransparencyController extends Controller
     public function donationExpenseTrend(): View
     {
         return $this->trend(
-            'Donation Expense Trend from 2002',
+            'Donation Expense Trend',
             'Annual donations distributed by the trust to beneficiaries and organisations.',
             Entry::where('entry_type', Entry::TYPE_DONATION_EXPENSE)
         );
@@ -283,7 +300,7 @@ class TransparencyController extends Controller
     public function investmentTrend(): View
     {
         return $this->trend(
-            'Total Investment (MF + FD + RD) Trend from 2002',
+            'Total Investment (MF + FD + RD) Trend',
             'Annual fresh investment into mutual funds, fixed deposits and recurring deposits.',
             Entry::whereIn('entry_type', [Entry::TYPE_MF_INVESTMENT, Entry::TYPE_FD_INVESTMENT, Entry::TYPE_RD_INVESTMENT])
         );
@@ -328,8 +345,17 @@ class TransparencyController extends Controller
             ->get()
             ->keyBy('financial_year');
 
-        $start = 2;   // FY02
-        $end = 26;    // FY26
+        // Derive FY range from actual data
+        $allYears = Entry::query()->select('financial_year')->distinct()->pluck('financial_year')->filter()->values();
+        if ($allYears->isEmpty()) {
+            $start = 2;
+            $end = 2;
+        } else {
+            $fyNums = $allYears->map(fn ($fy) => (int) substr((string) $fy, 2))->sort()->values();
+            $start = $fyNums->first();
+            $end = $fyNums->last();
+        }
+
         $series = [];
         for ($y = $start; $y <= $end; $y++) {
             $fy = sprintf('FY%02d', $y);

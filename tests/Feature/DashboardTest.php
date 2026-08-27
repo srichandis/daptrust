@@ -34,7 +34,9 @@ class DashboardTest extends TestCase
             ->assertSee('Account Balances')
             ->assertSee('Bank Account 1 (RD)')
             ->assertSee('Cash Account')
-            ->assertSee('Total Income')
+            ->assertSee('INCOME')
+            ->assertSee('EXPENSE')
+            ->assertSee('SAVINGS')
             ->assertSee('Income by Type')
             ->assertSee('Expenses by Type');
 
@@ -56,6 +58,6 @@ class DashboardTest extends TestCase
 
         $this->get(route('admin.dashboard'))
             ->assertOk()
-            ->assertSee('108,380.00');
+            ->assertSee('1,08,380.00');
     }
 }

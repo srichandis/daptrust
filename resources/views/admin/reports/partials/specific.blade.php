@@ -25,7 +25,7 @@
                     @endif
                 </td>
                 <td class="whitespace-nowrap py-2 pr-4 text-right font-medium {{ $entry->is_income ? 'text-emerald-600' : 'text-rose-600' }}">
-                    ₹{{ number_format($entry->amount, 2) }}
+                    ₹{{ indian_number_format($entry->amount, 2) }}
                 </td>
                 <td class="max-w-[16rem] py-2 text-slate-500">{{ $entry->particulars ?: '—' }}</td>
             </tr>
@@ -36,7 +36,7 @@
         <tfoot>
         <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
             <td class="py-2 pr-4" colspan="3">Total ({{ $entries->count() }} entries)</td>
-            <td class="py-2 pr-4 text-right">₹{{ number_format($entries->sum('amount'), 2) }}</td>
+            <td class="py-2 pr-4 text-right">₹{{ indian_number_format($entries->sum('amount'), 2) }}</td>
             <td></td>
         </tr>
         </tfoot>

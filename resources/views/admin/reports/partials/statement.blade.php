@@ -2,7 +2,7 @@
     @foreach ($statementAccounts as $account)
         <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
             <span class="font-medium text-slate-700">{{ $account->name }}</span>
-            <span class="ml-2 text-slate-500">Opening ₹{{ number_format($statementOpening[$account->id] ?? 0, 2) }}</span>
+            <span class="ml-2 text-slate-500">Opening ₹{{ indian_number_format($statementOpening[$account->id] ?? 0, 2) }}</span>
         </div>
     @endforeach
 </div>
@@ -41,10 +41,10 @@
                             <span class="text-slate-400">→ {{ $entry->toAccount->name }}</span>
                         @endif
                     </td>
-                    <td class="whitespace-nowrap py-2 pr-4 text-right text-rose-600">{{ $row['debit'] !== null ? '₹'.number_format($row['debit'], 2) : '' }}</td>
-                    <td class="whitespace-nowrap py-2 pr-4 text-right text-emerald-600">{{ $row['credit'] !== null ? '₹'.number_format($row['credit'], 2) : '' }}</td>
+                    <td class="whitespace-nowrap py-2 pr-4 text-right text-rose-600">{{ $row['debit'] !== null ? '₹'.indian_number_format($row['debit'], 2) : '' }}</td>
+                    <td class="whitespace-nowrap py-2 pr-4 text-right text-emerald-600">{{ $row['credit'] !== null ? '₹'.indian_number_format($row['credit'], 2) : '' }}</td>
                     <td class="whitespace-nowrap py-2 text-right font-medium text-slate-700">
-                        {{ $row['balance'] !== null ? '₹'.number_format($row['balance'], 2) : '' }}
+                        {{ $row['balance'] !== null ? '₹'.indian_number_format($row['balance'], 2) : '' }}
                     </td>
                 </tr>
             @endforeach
@@ -53,7 +53,7 @@
             @foreach ($statementAccounts as $account)
                 <tr class="border-t-2 border-slate-200">
                     <td class="py-2 pr-4 font-semibold text-slate-900" colspan="6">Closing — {{ $account->name }}</td>
-                    <td class="py-2 text-right font-semibold text-slate-900">₹{{ number_format($statementClosing[$account->id] ?? 0, 2) }}</td>
+                    <td class="py-2 text-right font-semibold text-slate-900">₹{{ indian_number_format($statementClosing[$account->id] ?? 0, 2) }}</td>
                 </tr>
             @endforeach
             </tfoot>

@@ -6,12 +6,12 @@
             @foreach ($masterIncome as $label => $value)
                 <tr class="border-t border-slate-100">
                     <td class="py-2 pr-4 text-slate-700">{{ $label }}</td>
-                    <td class="py-2 text-right font-medium text-emerald-600">₹{{ number_format($value, 2) }}</td>
+                    <td class="py-2 text-right font-medium text-emerald-600">₹{{ indian_number_format($value, 2) }}</td>
                 </tr>
             @endforeach
             <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
                 <td class="py-2 pr-4">Total Income</td>
-                <td class="py-2 text-right">₹{{ number_format(collect($masterIncome)->sum(), 2) }}</td>
+                <td class="py-2 text-right">₹{{ indian_number_format(collect($masterIncome)->sum(), 2) }}</td>
             </tr>
             </tbody>
         </table>
@@ -24,12 +24,12 @@
             @foreach ($masterExpense as $label => $value)
                 <tr class="border-t border-slate-100">
                     <td class="py-2 pr-4 text-slate-700">{{ $label }}</td>
-                    <td class="py-2 text-right font-medium text-rose-600">₹{{ number_format($value, 2) }}</td>
+                    <td class="py-2 text-right font-medium text-rose-600">₹{{ indian_number_format($value, 2) }}</td>
                 </tr>
             @endforeach
             <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
                 <td class="py-2 pr-4">Total Expenses</td>
-                <td class="py-2 text-right">₹{{ number_format(collect($masterExpense)->sum(), 2) }}</td>
+                <td class="py-2 text-right">₹{{ indian_number_format(collect($masterExpense)->sum(), 2) }}</td>
             </tr>
             </tbody>
         </table>
@@ -43,9 +43,14 @@
         @foreach ($bankBalances as $bank)
             <div class="rounded-xl border border-slate-200 p-4">
                 <p class="text-xs uppercase tracking-wide text-slate-500">{{ $bank['name'] }}</p>
-                <p class="mt-1 text-xl font-bold text-slate-900">₹{{ number_format($bank['balance'], 2) }}</p>
+                <p class="mt-1 text-xl font-bold text-slate-900">₹{{ indian_number_format($bank['balance'], 2) }}</p>
                 <p class="text-xs text-slate-400">{{ ucfirst($bank['type']) }}</p>
             </div>
         @endforeach
+        <div class="rounded-xl border-2 border-indigo-300 bg-indigo-50 p-4">
+            <p class="text-xs uppercase tracking-wide text-indigo-600 font-semibold">BANK BALANCE</p>
+            <p class="mt-1 text-xl font-bold text-indigo-700">₹{{ indian_number_format(collect($bankBalances)->sum('balance'), 2) }}</p>
+            <p class="text-xs text-indigo-400">Total</p>
+        </div>
     </div>
 </div>

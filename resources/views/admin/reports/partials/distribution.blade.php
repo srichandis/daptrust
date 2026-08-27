@@ -16,7 +16,7 @@
             <tr class="border-t border-slate-100">
                 <td class="py-2 pr-4 font-medium text-slate-800">{{ $recipient }}</td>
                 <td class="py-2 pr-4 text-right text-slate-500">{{ $info['count'] }}</td>
-                <td class="py-2 text-right font-medium text-rose-600">₹{{ number_format($info['total'], 2) }}</td>
+                <td class="py-2 text-right font-medium text-rose-600">₹{{ indian_number_format($info['total'], 2) }}</td>
             </tr>
         @empty
             <tr><td colspan="3" class="py-3 text-slate-500">No donations distributed in the selected period.</td></tr>
@@ -26,7 +26,7 @@
         <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
             <td class="py-2 pr-4">Total</td>
             <td class="py-2 pr-4 text-right">{{ $entries->count() }}</td>
-            <td class="py-2 text-right">₹{{ number_format($total, 2) }}</td>
+            <td class="py-2 text-right">₹{{ indian_number_format($total, 2) }}</td>
         </tr>
         </tfoot>
     </table>

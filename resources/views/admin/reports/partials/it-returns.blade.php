@@ -16,7 +16,7 @@
                 <tr class="border-t border-slate-100">
                     <td class="whitespace-nowrap py-2 pr-4">{{ $entry->entry_date?->format('d-m-Y') }}</td>
                     <td class="py-2 pr-4">{{ $entry->account?->name ?: '—' }}</td>
-                    <td class="py-2 pr-4 text-right font-medium text-emerald-600">₹{{ number_format($entry->amount, 2) }}</td>
+                    <td class="py-2 pr-4 text-right font-medium text-emerald-600">₹{{ indian_number_format($entry->amount, 2) }}</td>
                     <td class="py-2">{{ $entry->particulars ?: '—' }}</td>
                 </tr>
             @endforeach
@@ -24,7 +24,7 @@
             <tfoot>
             <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
                 <td class="py-2 pr-4" colspan="2">Total</td>
-                <td class="py-2 pr-4 text-right">₹{{ number_format($itReturns->sum('amount'), 2) }}</td>
+                <td class="py-2 pr-4 text-right">₹{{ indian_number_format($itReturns->sum('amount'), 2) }}</td>
                 <td></td>
             </tr>
             </tfoot>

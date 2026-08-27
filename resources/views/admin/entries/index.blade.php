@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <p class="text-sm text-slate-500">{{ $entries->total() }} entr{{ $entries->total() === 1 ? 'y' : 'ies' }} · Filtered total ₹{{ number_format($totalAmount, 2) }}</p>
+        <p class="text-sm text-slate-500">{{ $entries->total() }} entr{{ $entries->total() === 1 ? 'y' : 'ies' }} · Filtered total ₹{{ indian_number_format($totalAmount, 2) }}</p>
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.entries.create') }}"
                class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700">
@@ -111,7 +111,7 @@
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-4 py-3 text-right font-semibold {{ $entry->is_income ? 'text-emerald-600' : ($entry->is_expense ? 'text-red-600' : 'text-slate-700') }}">
-                                ₹{{ number_format($entry->amount, 2) }}
+                                ₹{{ indian_number_format($entry->amount, 2) }}
                             </td>
                             <td class="whitespace-nowrap px-4 py-3">
                                 <div class="flex items-center justify-end gap-3">

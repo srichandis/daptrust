@@ -45,7 +45,8 @@ class TransparencyTest extends TestCase
 
         $this->get(route('admin.transparency.financial-report'))
             ->assertOk()
-            ->assertSee('Total Income')
+            ->assertSee('INCOME')
+            ->assertSee('EXPENSE')
             ->assertSee('Income by Type')
             ->assertSee('25,000.00')
             ->assertSee('About & Governance');

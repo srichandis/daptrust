@@ -91,12 +91,17 @@ class ReportController extends Controller
             ->whereIn('entry_type', Entry::MATURITY_TYPES)
             ->sum('interest_amount');
 
+        $fdInterest = $income['fd_interest'] ?? 0;
+        $rdInterest = $income['rd_interest'] ?? 0;
+        $mfInterest = $income['mf_interest'] ?? 0;
+
         $masterIncome = [
             'Donation Receipts' => $income['donation_income'] ?? 0,
             'Bank Interest' => $income['bank_interest'] ?? 0,
-            'FD Interest' => $income['fd_interest'] ?? 0,
-            'RD Interest' => $income['rd_interest'] ?? 0,
-            'MF Interest' => $income['mf_interest'] ?? 0,
+            'FD Interest' => $fdInterest,
+            'RD Interest' => $rdInterest,
+            'MF Interest' => $mfInterest,
+            'FD / RD / MF Interest' => $fdInterest + $rdInterest + $mfInterest,
             'IT Returns' => $income['it_return'] ?? 0,
             'FD / RD / MF Maturities' => ($income['fd_maturity'] ?? 0) + ($income['rd_maturity'] ?? 0) + ($income['mf_maturity'] ?? 0),
             'Maturity Interest' => $maturityInterest,
@@ -104,9 +109,8 @@ class ReportController extends Controller
 
         $masterExpense = [
             'Donation Expense' => $expense['donation_expense'] ?? 0,
-            'Bank Charges' => $expense['bank_charges'] ?? 0,
+            'Bank Charges' => ($expense['bank_charges'] ?? 0) + ($expense['stationary_charges'] ?? 0),
             'Professional Charges' => $expense['professional_charges'] ?? 0,
-            'Stationary Charges' => $expense['stationary_charges'] ?? 0,
             'Courier Charges' => $expense['courier_charges'] ?? 0,
             'IT Paid' => $expense['it_paid'] ?? 0,
             'FD + RD + MF (Investments)' => ($expense['fd_investment'] ?? 0) + ($expense['rd_investment'] ?? 0) + ($expense['mf_investment'] ?? 0),
@@ -171,12 +175,16 @@ class ReportController extends Controller
             ->where('entry_type', $maturityType)
             ->sum('interest_amount');
 
+        $investmentTotal = (float) $investments->sum('amount');
+        $maturityTotal = (float) $maturities->sum('amount');
+
         return [
             'investmentType' => $prefix,
             'investments' => $investments,
             'maturities' => $maturities,
-            'investmentTotal' => (float) $investments->sum('amount'),
-            'maturityTotal' => (float) $maturities->sum('amount'),
+            'investmentTotal' => $investmentTotal,
+            'maturityTotal' => $maturityTotal,
+            'availableAmount' => $investmentTotal - $maturityTotal,
             'interestTotal' => $interestTotal + $interestOnMaturity,
         ];
     }
@@ -326,6 +334,12 @@ class ReportController extends Controller
 
         $byType = $entries->groupBy('entry_type')
             ->map(fn (Collection $group) => (float) $group->sum('amount'));
+
+        // Merge stationary_charges into bank_charges (matches Excel grouping)
+        if (isset($byType['stationary_charges'])) {
+            $byType['bank_charges'] = ($byType['bank_charges'] ?? 0) + $byType['stationary_charges'];
+            $byType->forget('stationary_charges');
+        }
 
         return [
             'entries' => $entries,
