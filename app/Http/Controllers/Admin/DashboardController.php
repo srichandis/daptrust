@@ -46,6 +46,13 @@ class DashboardController extends Controller
             unset($expenseByType['stationary_charges']);
         }
 
+        // FD, RD and MF interest are shown as one "FD/RD/MF INTEREST" line, the
+        // same grouping the Excel sheet and the trust summary use.
+        $incomeByType[Entry::TYPE_FD_INTEREST] = ($incomeByType[Entry::TYPE_FD_INTEREST] ?? 0)
+            + ($incomeByType[Entry::TYPE_RD_INTEREST] ?? 0)
+            + ($incomeByType[Entry::TYPE_MF_INTEREST] ?? 0);
+        unset($incomeByType[Entry::TYPE_RD_INTEREST], $incomeByType[Entry::TYPE_MF_INTEREST]);
+
         $latestEntries = Entry::with(['account', 'toAccount'])
             ->orderByDesc('entry_date')
             ->orderByDesc('id')

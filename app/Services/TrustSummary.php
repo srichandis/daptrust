@@ -16,11 +16,14 @@ use Illuminate\Database\Eloquent\Builder;
  *   BANK CHARGES          = bank_charges + stationary_charges (Excel F + K + AC + AU)
  *   BANK INTEREST         = bank_interest
  *   FD/RD/MF INTEREST     = fd_interest + rd_interest + mf_interest
+ *                           (Excel M2537+N2537+O2537 + AE2537+AF2537+AG2537
+ *                            + AW2537+AX2537+AY2537 — AB, SBI and HDFC)
  *   PROFESSIONAL CHARGES  = professional_charges
  *   IT RETURN             = it_return
  *   FD + MF + RD          = investments - maturities (net, as Excel D2555)
  *   BANK BALANCE          = closing balance of every account
- *   DON TO OPS            = donation_to_ops
+ *                           (Excel H2537+Z2537+AR2537+BJ2537 — cash, AB, SBI, HDFC)
+ *   DON TO OPS            = donation_to_ops (Excel BL2537)
  */
 class TrustSummary
 {

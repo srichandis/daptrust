@@ -83,12 +83,28 @@
             </div>
             <div class="divide-y divide-slate-100">
                 @foreach (\App\Models\Entry::GROUPS['Income'] as $type)
-                    @php $total = $incomeByType[$type] ?? 0; @endphp
+                    @continue (in_array($type, [\App\Models\Entry::TYPE_RD_INTEREST, \App\Models\Entry::TYPE_MF_INTEREST], true))
+                    @php
+                        $total = $incomeByType[$type] ?? 0;
+                        $label = $type === \App\Models\Entry::TYPE_FD_INTEREST ? 'FD/RD/MF INTEREST' : \App\Models\Entry::labelFor($type);
+                    @endphp
                     <div class="flex items-center justify-between px-5 py-3 text-sm">
-                        <span class="text-slate-600">{{ \App\Models\Entry::labelFor($type) }}</span>
+                        <span class="text-slate-600">{{ $label }}</span>
                         <span class="font-semibold text-emerald-600">₹{{ indian_number_format($total, 2) }}</span>
                     </div>
                 @endforeach
+
+                {{-- Net FD/RD/MF still invested: Excel FD + MF + RD (D2555) --}}
+                <div class="flex items-center justify-between px-5 py-3 text-sm">
+                    <span class="text-slate-600">FD + MF + RD</span>
+                    <span class="font-semibold text-emerald-600">₹{{ indian_number_format($trustSummary['FD + MF + RD'], 2) }}</span>
+                </div>
+
+                {{-- Donations routed to OPS: Excel DON TO OPS (BL2537) --}}
+                <div class="flex items-center justify-between px-5 py-3 text-sm">
+                    <span class="text-slate-600">DON TO OPS</span>
+                    <span class="font-semibold text-emerald-600">₹{{ indian_number_format($trustSummary['DON TO OPS'], 2) }}</span>
+                </div>
             </div>
         </div>
 
