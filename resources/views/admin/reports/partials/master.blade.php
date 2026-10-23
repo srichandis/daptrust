@@ -1,3 +1,41 @@
+{{-- Trust summary, mirroring the Excel MASTER summary block --}}
+<div class="mb-8">
+    <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-700">Trust Summary</h3>
+    <table class="w-full text-sm">
+        <tbody>
+        @foreach ($trustSummary as $label => $value)
+            @php
+                $isIncome = in_array($label, ['DONOR / RECEIPTS', 'BANK INTEREST', 'FD/RD/MF INTEREST', 'IT RETURN']);
+                $isExpense = in_array($label, ['DONATION', 'BANK CHARGES', 'PROFESSIONAL CHARGES', 'DON TO OPS']);
+            @endphp
+            <tr class="border-t border-slate-100">
+                <td class="py-2 pr-4 text-slate-700">{{ $label }}</td>
+                <td class="py-2 text-right font-medium
+                    {{ $isIncome ? 'text-emerald-600' : ($isExpense ? 'text-rose-600' : 'text-slate-900') }}">
+                    ₹{{ indian_number_format($value, 2) }}
+                </td>
+            </tr>
+        @endforeach
+        <tr class="border-t-2 border-slate-200 font-semibold text-slate-900">
+            <td class="py-2 pr-4">INCOME</td>
+            <td class="py-2 text-right">₹{{ indian_number_format($summaryTotals['income'], 2) }}</td>
+        </tr>
+        <tr class="border-t border-slate-100 font-semibold text-slate-900">
+            <td class="py-2 pr-4">EXPENSE</td>
+            <td class="py-2 text-right">₹{{ indian_number_format($summaryTotals['expense'], 2) }}</td>
+        </tr>
+        <tr class="border-t border-slate-100 font-semibold text-slate-900">
+            <td class="py-2 pr-4">SAVINGS</td>
+            <td class="py-2 text-right">₹{{ indian_number_format($summaryTotals['savings'], 2) }}</td>
+        </tr>
+        <tr class="border-t border-slate-100 font-semibold text-slate-900">
+            <td class="py-2 pr-4">EXP + SAV</td>
+            <td class="py-2 text-right">₹{{ indian_number_format($summaryTotals['exp_plus_sav'], 2) }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <div class="grid gap-8 lg:grid-cols-2">
     <div>
         <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-700">Income</h3>

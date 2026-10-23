@@ -46,8 +46,9 @@ class Account extends Model
     }
 
     /**
-     * Computed balance = opening balance + income - expenses - investments - transfers out + transfers in.
-     * Transfer entries are excluded from the plain income/expense sums and handled via to/from columns.
+     * Computed balance = opening balance + income - expenses - investments, plus
+     * transfers: paired transfers move money between accounts, while imported
+     * one-sided transfers are signed net movements added to the account.
      */
     public function balance(): float
     {
@@ -70,19 +71,36 @@ class Account extends Model
         };
 
         $income = $sum('amount', Entry::INCOME_TYPES, 'account_id');
-        $expense = $sum('amount', Entry::EXPENSE_TYPES, 'account_id');
+
+        // Donation-to-OPS is recorded against an account for reporting, but the
+        // Excel balances never deduct it, so it must not move the balance.
+        $expenseTypes = array_values(array_diff(Entry::EXPENSE_TYPES, [Entry::TYPE_DONATION_TO_OPS]));
+        $expense = $sum('amount', $expenseTypes, 'account_id');
 
         // Maturity interest is credited to the account; charges are debited.
         $maturityInterest = $sum('interest_amount', Entry::MATURITY_TYPES, 'account_id');
         $maturityCharges = $sum('bank_charges_amount', Entry::MATURITY_TYPES, 'account_id');
 
+        // Imported MASTER transfers are one-sided and carry their sign (the
+        // Excel BANK TRANSFER columns are net movements), so they are added
+        // as-is. Manually recorded transfers carry a destination account and a
+        // positive amount, so they move money out of this account instead.
         $transfersIn = $sum('amount', ['bank_transfer'], 'to_account_id');
-        $transfersOut = $sum('amount', ['bank_transfer'], 'account_id');
+        $singleSidedTransfers = (float) Entry::where('account_id', $this->id)
+            ->where('entry_type', Entry::TYPE_BANK_TRANSFER)
+            ->whereNull('to_account_id')
+            ->when($date !== null, fn ($query) => $query->where('entry_date', '<=', $date))
+            ->sum('amount');
+        $pairedTransfersOut = (float) Entry::where('account_id', $this->id)
+            ->where('entry_type', Entry::TYPE_BANK_TRANSFER)
+            ->whereNotNull('to_account_id')
+            ->when($date !== null, fn ($query) => $query->where('entry_date', '<=', $date))
+            ->sum('amount');
 
         return round(
             $this->opening_balance + $income - $expense
             + $maturityInterest - $maturityCharges
-            + $transfersIn - $transfersOut,
+            + $singleSidedTransfers + $transfersIn - $pairedTransfersOut,
             2,
         );
     }

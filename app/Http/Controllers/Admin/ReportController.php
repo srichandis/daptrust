@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Entry;
+use App\Services\TrustSummary;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -49,7 +50,7 @@ class ReportController extends Controller
             ->when($to, fn ($q) => $q->whereDate('entry_date', '<=', $to));
 
         $data = match ($report) {
-            'master' => $this->masterData($query, $to),
+            'master' => $this->masterData($query, $from, $to),
             'snapshot' => $this->snapshotData($query),
             'it-returns' => $this->itReturnData($query),
             'fd-details' => $this->investmentData($query, 'FD'),
@@ -79,7 +80,7 @@ class ReportController extends Controller
 
     // ------------------------------------------------------------------ data
 
-    private function masterData($query, ?string $to): array
+    private function masterData($query, ?string $from, ?string $to): array
     {
         $income = $this->sumByTypes($query, Entry::INCOME_TYPES);
         $expense = $this->sumByTypes($query, Entry::EXPENSE_TYPES);
@@ -122,7 +123,12 @@ class ReportController extends Controller
             'balance' => $a->balanceAsOf($to),
         ]);
 
-        return compact('masterIncome', 'masterExpense', 'bankBalances');
+        // The trust summary mirrors the Excel MASTER sheet's summary block.
+        $summary = new TrustSummary($from, $to);
+        $trustSummary = $summary->lines();
+        $summaryTotals = $summary->totals();
+
+        return compact('masterIncome', 'masterExpense', 'bankBalances', 'trustSummary', 'summaryTotals');
     }
 
     private function snapshotData($query): array
@@ -236,7 +242,8 @@ class ReportController extends Controller
                 ? ($entry->to_account_id ?? $entry->account_id)
                 : ($entry->account_id ?? $entry->to_account_id);
             $isIncome = in_array($entry->entry_type, Entry::INCOME_TYPES, true);
-            $isExpense = in_array($entry->entry_type, Entry::EXPENSE_TYPES, true);
+            $isExpense = $entry->entry_type !== Entry::TYPE_DONATION_TO_OPS
+                && in_array($entry->entry_type, Entry::EXPENSE_TYPES, true);
             $isMaturity = in_array($entry->entry_type, Entry::MATURITY_TYPES, true);
 
             $debit = null;
@@ -244,8 +251,19 @@ class ReportController extends Controller
 
             if ($entry->entry_type === Entry::TYPE_BANK_TRANSFER) {
                 if ($entry->account_id !== null) {
-                    $running[$entry->account_id] = round($running[$entry->account_id] - $entry->amount, 2);
-                    $debit = $entry->amount;
+                    if ($entry->to_account_id !== null) {
+                        // Paired transfer: money moves out of the source account.
+                        $running[$entry->account_id] = round($running[$entry->account_id] - $entry->amount, 2);
+                        $debit = $entry->amount;
+                    } else {
+                        // Imported MASTER row: a signed net transfer for this account.
+                        $running[$entry->account_id] = round(($running[$entry->account_id] ?? 0) + $entry->amount, 2);
+                        if ($entry->amount >= 0) {
+                            $credit = $entry->amount;
+                        } else {
+                            $debit = abs($entry->amount);
+                        }
+                    }
                 }
                 if ($entry->to_account_id !== null) {
                     $running[$entry->to_account_id] = round($running[$entry->to_account_id] + $entry->amount, 2);

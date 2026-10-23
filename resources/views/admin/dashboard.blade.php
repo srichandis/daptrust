@@ -26,7 +26,7 @@
         </div>
         <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <p class="text-sm font-medium text-slate-500">EXP + SAV</p>
-            <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ indian_number_format($incomeTotal, 2) }}</p>
+            <p class="mt-1 text-2xl font-bold text-slate-900">₹{{ indian_number_format($expPlusSav, 2) }}</p>
             <p class="mt-1 text-xs text-slate-400">Should equal INCOME</p>
         </div>
     </div>
@@ -118,9 +118,8 @@
         <div class="divide-y divide-slate-100">
             @foreach ($trustSummary as $label => $value)
                 @php
-                    $isIncome = in_array($label, ['Donor / Receipts', 'Bank Interest', 'FD/RD/MF Interest', 'IT Return']);
-                    $isExpense = in_array($label, ['Donation (Disbursements)', 'Bank Charges', 'Professional Charges']);
-                    $isNeutral = $label === 'FD + MF + RD (Investments)';
+                    $isIncome = in_array($label, ['DONOR / RECEIPTS', 'BANK INTEREST', 'FD/RD/MF INTEREST', 'IT RETURN']);
+                    $isExpense = in_array($label, ['DONATION', 'BANK CHARGES', 'PROFESSIONAL CHARGES', 'DON TO OPS']);
                 @endphp
                 <div class="flex items-center justify-between px-5 py-3 text-sm">
                     <span class="text-slate-600">{{ $label }}</span>
@@ -130,25 +129,10 @@
                     </span>
                 </div>
             @endforeach
-            {{-- Donation to OPS (separate category) --}}
-            <div class="flex items-center justify-between px-5 py-3 text-sm">
-                <span class="text-slate-600">Donation to OPS</span>
-                <span class="font-semibold text-red-600">₹{{ indian_number_format($opsDonationTotal, 2) }}</span>
-            </div>
-            @php
-                $netIncome = ($trustSummary['Donor / Receipts'] ?? 0)
-                    + ($trustSummary['Bank Interest'] ?? 0)
-                    + ($trustSummary['FD/RD/MF Interest'] ?? 0)
-                    + ($trustSummary['IT Return'] ?? 0);
-                $netExpense = ($trustSummary['Donation (Disbursements)'] ?? 0)
-                    + ($trustSummary['Bank Charges'] ?? 0)
-                    + ($trustSummary['Professional Charges'] ?? 0);
-                $net = $netIncome - $netExpense;
-            @endphp
             <div class="flex items-center justify-between px-5 py-3.5 text-sm font-semibold">
                 <span class="text-slate-800">Net Income − Expenses</span>
-                <span class="{{ $net >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
-                    ₹{{ indian_number_format($net, 2) }}
+                <span class="{{ $summaryTotals['income'] - $summaryTotals['expense'] >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
+                    ₹{{ indian_number_format($summaryTotals['income'] - $summaryTotals['expense'], 2) }}
                 </span>
             </div>
         </div>
